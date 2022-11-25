@@ -25,6 +25,9 @@ final class HomeVC: UIViewController {
         let stackview = UIStackView()
         stackview.translatesAutoresizingMaskIntoConstraints = false
         stackview.axis = .horizontal
+        stackview.spacing = 10.0
+        stackview.isLayoutMarginsRelativeArrangement = true
+        stackview.layoutMargins = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         return stackview
     }()
     
@@ -33,6 +36,7 @@ final class HomeVC: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.placeholder = "Enter the currency amount here"
         view.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        view.borderStyle = .roundedRect
         return view
     }()
 
@@ -65,11 +69,9 @@ final class HomeVC: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-//        layout.itemSize = CGSize(width: 115, height: 115)
-//        layout.estimatedItemSize = CGSize(width: 100, height: 100)
-        layout.minimumInteritemSpacing = 0
-        layout.minimumLineSpacing = 0
-        layout.sectionInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+        layout.minimumInteritemSpacing = 10
+        layout.minimumLineSpacing = 10
+        layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         return layout
     }()
     
@@ -79,8 +81,8 @@ final class HomeVC: UIViewController {
     private lazy var conversionResultCollection: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-//        collectionView.backgroundColor = .blue
         collectionView.register(Cell.self)
+        collectionView.backgroundColor = .white
         return collectionView
     }()
 
@@ -119,8 +121,8 @@ final class HomeVC: UIViewController {
         NSLayoutConstraint.activate([
             container.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10.0),
             container.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            container.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 10.0),
-            container.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -10.0)
+            container.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 0.0),
+            container.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: 0.0)
         ])
     }
 

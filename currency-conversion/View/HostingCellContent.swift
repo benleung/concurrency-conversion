@@ -14,11 +14,12 @@ protocol HostingCellContent: View {
 }
 
 final class HostingCell<Content: HostingCellContent>: UICollectionViewCell {
-    private let hostingController = UIHostingController<Content?>(rootView: nil)
+    private let hostingController = FixSafeAreaInsetsHostingController<Content?>(rootView: nil)
 
     override public init(frame: CGRect) {
         super.init(frame: frame)
         hostingController.view.backgroundColor = .clear
+        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
     }
 
     @available(*, unavailable)
@@ -28,10 +29,10 @@ final class HostingCell<Content: HostingCellContent>: UICollectionViewCell {
 
     public func configure(_ dependency: Content.Dependency, parent: UIViewController) {
         hostingController.rootView = Content(dependency)
-//        hostingController.view.invalidateIntrinsicContentSize()
-        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+        hostingController.view.invalidateIntrinsicContentSize()
 
         guard hostingController.parent == nil else { return }
+
         parent.addChild(hostingController)
         contentView.addSubview(hostingController.view)
         setupConstraints()

@@ -36,8 +36,8 @@ struct ConversionResultCell: HostingCellContent {
         .cornerRadius(4)
         .clipped()
         .shadow(
-            color: Color.black.opacity(0.1),
-            radius: 8,
+            color: Color.black.opacity(0.06),
+            radius: 4,
             x: 0,
             y: 2
         )
