@@ -38,7 +38,7 @@ struct CurrencySelectView: View {
             }
             .padding(EdgeInsets(top: 10, leading: 20, bottom: 0, trailing: 20))
             List {
-                ForEach(models, id: \.self) { model in
+                ForEach(models.filter { searchText.isEmpty || $0.currencyNameWithAlias.contains(searchText) } , id: \.self) { model in
                     Button {
                         presentationMode.wrappedValue.dismiss()
                         input.didSelectedCurrency.send(model.currencyAlias)

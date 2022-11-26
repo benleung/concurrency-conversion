@@ -33,12 +33,12 @@ struct ConversionResultCell: HostingCellContent {
         .padding(10)
         .frame(width: 115, height: 115)
         .background(Color.white)
-        .cornerRadius(4)
+        .cornerRadius(6)
         .clipped()
         .shadow(
-            color: Color.black.opacity(0.06),
-            radius: 4,
-            x: 0,
+            color: Color.black.opacity(0.1),
+            radius: 2,
+            x: 2,
             y: 2
         )
     }

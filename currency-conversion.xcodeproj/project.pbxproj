@@ -25,6 +25,8 @@
 		B5AB11482930857700C4DBCD /* HomeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5AB11472930857600C4DBCD /* HomeModel.swift */; };
 		B5AB114B29310B0100C4DBCD /* FixSafeAreaInsetsHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5AB114A29310B0000C4DBCD /* FixSafeAreaInsetsHostingController.swift */; };
 		B5AB114D2931147200C4DBCD /* CurrencySelectModalVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5AB114C2931147200C4DBCD /* CurrencySelectModalVC.swift */; };
+		B5AB11522931CA8700C4DBCD /* AppUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5AB11512931CA8700C4DBCD /* AppUserDefaults.swift */; };
+		B5AB11562932199500C4DBCD /* HomeVMTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5AB11552932199500C4DBCD /* HomeVMTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +61,8 @@
 		B5AB11472930857600C4DBCD /* HomeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeModel.swift; sourceTree = "<group>"; };
 		B5AB114A29310B0000C4DBCD /* FixSafeAreaInsetsHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixSafeAreaInsetsHostingController.swift; sourceTree = "<group>"; };
 		B5AB114C2931147200C4DBCD /* CurrencySelectModalVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencySelectModalVC.swift; sourceTree = "<group>"; };
+		B5AB11512931CA8700C4DBCD /* AppUserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUserDefaults.swift; sourceTree = "<group>"; };
+		B5AB11552932199500C4DBCD /* HomeVMTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVMTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +104,9 @@
 		B5AB1101292E77EF00C4DBCD /* currency-conversion */ = {
 			isa = PBXGroup;
 			children = (
+				B5AB11502931CA3800C4DBCD /* UserDefaults */,
+				B5AB114F2931C5AB00C4DBCD /* API */,
+				B5AB114E2931C4EF00C4DBCD /* Repository */,
 				B5AB1133292E790300C4DBCD /* View */,
 				B5AB1132292E782200C4DBCD /* Feature */,
 				B5AB1102292E77EF00C4DBCD /* AppDelegate.swift */,
@@ -116,6 +123,7 @@
 		B5AB1118292E77F100C4DBCD /* currency-conversionTests */ = {
 			isa = PBXGroup;
 			children = (
+				B5AB11532932190D00C4DBCD /* Feature */,
 				B5AB1119292E77F100C4DBCD /* currency_conversionTests.swift */,
 			);
 			path = "currency-conversionTests";
@@ -160,6 +168,44 @@
 				B5AB114C2931147200C4DBCD /* CurrencySelectModalVC.swift */,
 			);
 			path = CurrencySelectModal;
+			sourceTree = "<group>";
+		};
+		B5AB114E2931C4EF00C4DBCD /* Repository */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Repository;
+			sourceTree = "<group>";
+		};
+		B5AB114F2931C5AB00C4DBCD /* API */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		B5AB11502931CA3800C4DBCD /* UserDefaults */ = {
+			isa = PBXGroup;
+			children = (
+				B5AB11512931CA8700C4DBCD /* AppUserDefaults.swift */,
+			);
+			path = UserDefaults;
+			sourceTree = "<group>";
+		};
+		B5AB11532932190D00C4DBCD /* Feature */ = {
+			isa = PBXGroup;
+			children = (
+				B5AB11542932191C00C4DBCD /* Home */,
+			);
+			path = Feature;
+			sourceTree = "<group>";
+		};
+		B5AB11542932191C00C4DBCD /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				B5AB11552932199500C4DBCD /* HomeVMTests.swift */,
+			);
+			path = Home;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -276,6 +322,7 @@
 				B5AB11482930857700C4DBCD /* HomeModel.swift in Sources */,
 				B5AB1105292E77EF00C4DBCD /* SceneDelegate.swift in Sources */,
 				B5AB114429307F9700C4DBCD /* UICollectionView.swift in Sources */,
+				B5AB11522931CA8700C4DBCD /* AppUserDefaults.swift in Sources */,
 				B5AB1140292FDEBD00C4DBCD /* HostingReusableView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -285,6 +332,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B5AB111A292E77F100C4DBCD /* currency_conversionTests.swift in Sources */,
+				B5AB11562932199500C4DBCD /* HomeVMTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -101,6 +101,12 @@ final class HomeVC: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        input.viewWillAppear.send()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -129,7 +135,7 @@ final class HomeVC: UIViewController {
 
     private func binding() {
         // Input
-        amountInputView.numberPublisher.sink { [weak self] in
+        amountInputView.numberPublisher.debounce(for: 0.5, scheduler: DispatchQueue.main).sink { [weak self] in
             self?.input.amount.send($0)
         }.store(in: &cancellables)
         
@@ -138,25 +144,22 @@ final class HomeVC: UIViewController {
         }.store(in: &cancellables)        
         
         // Output
-        output.openCurrencySelectModal.sink {
-            
-            var items: [CurrencySelectView.Model] = []
-            
-            for i in 0..<200 {
-                items.append(CurrencySelectView.Model(
-                    currencyAlias: "\(i)USD",
-                    currencyNameWithAlias: "USD (US Dollars)"
-                ))
-            }
-            
-            let vc = UIHostingController(rootView: CurrencySelectView(items, input: self.input, selectedCurrencyUnit: "1USD"))
-            vc.view.invalidateIntrinsicContentSize()
-            vc.view.translatesAutoresizingMaskIntoConstraints = false
-            self.present(vc, animated: true)
-        }.store(in: &cancellables)
+        output.selectedCurrencyUnit
+            .sink {
+                self.currencyDropdownButton.setTitle($0, for: .normal)
+            }.store(in: &cancellables)
         
-        output.snapshot.sink { [weak self] in
-            self?.dataSource.apply($0)
+        output.openCurrencySelectModal
+            .sink {
+                let currencySelectView = CurrencySelectView($0.list, input: self.input, selectedCurrencyUnit: $0.selected)
+                let vc = UIHostingController(rootView: currencySelectView)
+                self.present(vc, animated: true)
+            }.store(in: &cancellables)
+        
+        output.snapshot.sink { [weak self] snapshot in
+            DispatchQueue.main.async {
+                self?.dataSource.apply(snapshot)
+            }
         }.store(in: &cancellables)
     }
 }
