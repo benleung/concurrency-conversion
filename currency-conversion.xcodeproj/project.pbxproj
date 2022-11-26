@@ -24,6 +24,7 @@
 		B5AB114429307F9700C4DBCD /* UICollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5AB114329307F9700C4DBCD /* UICollectionView.swift */; };
 		B5AB11482930857700C4DBCD /* HomeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5AB11472930857600C4DBCD /* HomeModel.swift */; };
 		B5AB114B29310B0100C4DBCD /* FixSafeAreaInsetsHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5AB114A29310B0000C4DBCD /* FixSafeAreaInsetsHostingController.swift */; };
+		B5AB114D2931147200C4DBCD /* CurrencySelectModalVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5AB114C2931147200C4DBCD /* CurrencySelectModalVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,7 @@
 		B5AB114329307F9700C4DBCD /* UICollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionView.swift; sourceTree = "<group>"; };
 		B5AB11472930857600C4DBCD /* HomeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeModel.swift; sourceTree = "<group>"; };
 		B5AB114A29310B0000C4DBCD /* FixSafeAreaInsetsHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixSafeAreaInsetsHostingController.swift; sourceTree = "<group>"; };
+		B5AB114C2931147200C4DBCD /* CurrencySelectModalVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencySelectModalVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +157,7 @@
 		B5AB1149293085DC00C4DBCD /* CurrencySelectModal */ = {
 			isa = PBXGroup;
 			children = (
+				B5AB114C2931147200C4DBCD /* CurrencySelectModalVC.swift */,
 			);
 			path = CurrencySelectModal;
 			sourceTree = "<group>";
@@ -265,6 +268,7 @@
 				B5AB113A292F98A100C4DBCD /* NumberInputTextField.swift in Sources */,
 				B5AB114B29310B0100C4DBCD /* FixSafeAreaInsetsHostingController.swift in Sources */,
 				B5AB113E292FDB6C00C4DBCD /* HostingCellContent.swift in Sources */,
+				B5AB114D2931147200C4DBCD /* CurrencySelectModalVC.swift in Sources */,
 				B5AB113C292FDA4E00C4DBCD /* ConversionResultCell.swift in Sources */,
 				B5AB1107292E77EF00C4DBCD /* ViewController.swift in Sources */,
 				B5AB1137292E795800C4DBCD /* HomeVM.swift in Sources */,

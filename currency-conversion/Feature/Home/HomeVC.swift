@@ -7,6 +7,7 @@
 
 import UIKit
 import Combine
+import SwiftUI
 
 final class HomeVC: UIViewController {
 
@@ -134,11 +135,24 @@ final class HomeVC: UIViewController {
         
         currencyDropdownButton.publisher(for: .touchUpInside).sink { [weak self] _ in
             self?.input.didTapCurrencyDropDownView.send()
-        }.store(in: &cancellables)
-
+        }.store(in: &cancellables)        
+        
         // Output
         output.openCurrencySelectModal.sink {
-            print("openCurrencySelectModal")
+            
+            var items: [CurrencySelectView.Model] = []
+            
+            for i in 0..<200 {
+                items.append(CurrencySelectView.Model(
+                    currencyAlias: "\(i)USD",
+                    currencyNameWithAlias: "USD (US Dollars)"
+                ))
+            }
+            
+            let vc = UIHostingController(rootView: CurrencySelectView(items, input: self.input, selectedCurrencyUnit: "1USD"))
+            vc.view.invalidateIntrinsicContentSize()
+            vc.view.translatesAutoresizingMaskIntoConstraints = false
+            self.present(vc, animated: true)
         }.store(in: &cancellables)
         
         output.snapshot.sink { [weak self] in

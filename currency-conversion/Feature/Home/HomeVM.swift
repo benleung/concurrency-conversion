@@ -11,9 +11,11 @@ import UIKit
 struct HomeVMInput {
     var amount = PassthroughSubject<Float, Never>()
     var didTapCurrencyDropDownView = PassthroughSubject<Void, Never>()
+    var didSelectedCurrency = PassthroughSubject<String, Never>()
 }
 protocol HomeVMOutput {
     var openCurrencySelectModal: AnyPublisher<Void, Never> { get }
+    var selectedCurrencyUnit: AnyPublisher<String, Never> { get }   // use viewstate instead of 
     var snapshot: AnyPublisher<HomeModel.Snapshot, Never> { get }
 }
 
@@ -26,6 +28,11 @@ final class HomeVM: HomeVMOutput {
         input.didTapCurrencyDropDownView.eraseToAnyPublisher()
     }()
 
+    lazy var selectedCurrencyUnit: AnyPublisher<String, Never> = {
+        _selectedCurrencyUnit.eraseToAnyPublisher()
+    }()
+    private var _selectedCurrencyUnit = CurrentValueSubject<String, Never>("USD")
+
     lazy var snapshot: AnyPublisher<HomeModel.Snapshot, Never> = {
         return _snapshot.eraseToAnyPublisher()
     }()
@@ -34,6 +41,7 @@ final class HomeVM: HomeVMOutput {
     init(input: HomeVMInput) {
         self.input = input
         
+        // snapshot
         // FIXME: WIP starts
         var snapshot = HomeModel.Snapshot()
         
@@ -52,6 +60,13 @@ final class HomeVM: HomeVMOutput {
         
         _snapshot.send(snapshot)
         // FIXME: WIP ends
+        
+        // selectedCurrencyUnit
+        input.didSelectedCurrency.sink {
+            self._selectedCurrencyUnit.send($0)
+        }
+        .store(in: &cancellables)
+        
         
         input.amount.sink {
             print($0)
