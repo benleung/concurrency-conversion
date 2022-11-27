@@ -38,7 +38,7 @@ struct CurrencySelectView: View {
             }
             .padding(EdgeInsets(top: 10, leading: 20, bottom: 0, trailing: 20))
             List {
-                ForEach(models.filter { searchText.isEmpty || $0.currencyNameWithAlias.contains(searchText) } , id: \.self) { model in
+                ForEach(models.filter { CurrencySelectView.filterWithSearchText(searchText: searchText, itemText: $0.currencyNameWithAlias) } , id: \.self) { model in
                     Button {
                         presentationMode.wrappedValue.dismiss()
                         input.didSelectedCurrency.send(model.currencyAlias)
@@ -57,5 +57,10 @@ struct CurrencySelectView: View {
             }
             
         }
+    }
+    
+    // open visibility to interal for testing
+    static func filterWithSearchText(searchText: String, itemText: String) -> Bool {
+        searchText.isEmpty || itemText.contains(searchText)
     }
 }

@@ -26,22 +26,39 @@ struct GetCurrenciesUseCaseIO : Codable {
 }
 
 struct GetCurrenciesUseCaseImp: GetCurrenciesUseCase {
+    private let cacheExpireSeconds: TimeInterval = 60*30 // 30 mintues
+    private let timeProvider: TimeProvider
+    private let getCurrencyListAPI: GetCurrencyListAPI
+    private let getLatestExchangeRateAPI: GetLatestExchangeRateAPI
+    
+    init(
+        timeProvider: TimeProvider = TimeProviderImp(),
+        getCurrencyListAPI: GetCurrencyListAPI = GetCurrencyListAPI(),
+        getLatestExchangeRateAPI: GetLatestExchangeRateAPI = GetLatestExchangeRateAPI()
+    ) {
+        self.timeProvider = timeProvider
+        self.getCurrencyListAPI = getCurrencyListAPI
+        self.getLatestExchangeRateAPI = getLatestExchangeRateAPI
+    }
+    
     func execute() async throws -> GetCurrenciesUseCaseIO.Output {
-
+        // FIXME: should use async let
         let currencyNames: [String: String] = try await {
-            if let lastUpdated = AppUserDefaults.shared.currencyNamesLastUpdated, lastUpdated.timeIntervalSinceNow >= -60*30 {
+            let secondsSinceLastCached = timeProvider.now().timeIntervalSinceReferenceDate - (AppUserDefaults.shared.currencyNamesLastUpdated ?? Date.distantPast).timeIntervalSinceReferenceDate
+            if secondsSinceLastCached >= cacheExpireSeconds {
                 // cache expires and need refresh
-                AppUserDefaults.shared.currencyNamesLastUpdated = Date()
-                AppUserDefaults.shared.currencyNames = try await GetCurrencyListAPI().perform()
+                AppUserDefaults.shared.currencyNames = try await getCurrencyListAPI.execute()
+                AppUserDefaults.shared.currencyNamesLastUpdated = timeProvider.now()
             }
             return AppUserDefaults.shared.currencyNames
         }()
 
         let exchangeRates: [String : Double] = try await {
-            if let lastUpdated = AppUserDefaults.shared.currencyNamesLastUpdated, lastUpdated.timeIntervalSinceNow >= -60*30 {
+            let secondsSinceLastCached = timeProvider.now().timeIntervalSinceReferenceDate - (AppUserDefaults.shared.exchangeRatesLastUpdated ?? Date.distantPast).timeIntervalSinceReferenceDate
+            if secondsSinceLastCached >= cacheExpireSeconds {
                 // cache expires and need refresh
-                AppUserDefaults.shared.exchangeRatesLastUpdated = Date()
-                AppUserDefaults.shared.exchangeRates = try await GetLatestExchangeRateAPI().perform(decode: GetLatestExchangeRateResponse.self).rates
+                AppUserDefaults.shared.exchangeRates = try await getLatestExchangeRateAPI.execute().rates
+                AppUserDefaults.shared.exchangeRatesLastUpdated = timeProvider.now()
             }
             return AppUserDefaults.shared.exchangeRates
         }()

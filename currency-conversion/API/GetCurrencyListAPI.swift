@@ -7,6 +7,10 @@
 
 import Foundation
 
-struct GetCurrencyListAPI : OpenExchangeRatesApiProtocol {
+class GetCurrencyListAPI : OpenExchangeRatesApiProtocol {
     var path: String = "currencies.json"
+    
+    func execute() async throws -> [String: String] {
+        try await perform()
+    }
 }

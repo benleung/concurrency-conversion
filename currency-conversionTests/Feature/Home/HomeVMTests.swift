@@ -68,7 +68,7 @@ final class HomeVMTests: XCTestCase {
             XCTAssertEqual(actual, expected)
             waitAfterDidUpdateAmount.fulfill()
         }
-        wait(for: [waitAfterDidUpdateAmount], timeout: 1.0)
+        wait(for: [waitAfterDidUpdateAmount], timeout: 5.0)
     }
 
     func test_didTapCurrencyDropDownView_afterViewAppeared() throws {
@@ -115,7 +115,7 @@ final class HomeVMTests: XCTestCase {
             }
             waitAfterAppearing.fulfill()
         }
-        wait(for: [waitAfterAppearing], timeout: 1.0)
+        wait(for: [waitAfterAppearing], timeout: 5.0)
     }
 
     func test_didTapCurrencyDropDownView_afterSelectedAnotherCurrency() throws {
@@ -153,7 +153,7 @@ final class HomeVMTests: XCTestCase {
             }
             waitAfterAppearing.fulfill()
         }
-        wait(for: [waitAfterAppearing], timeout: 1.0)
+        wait(for: [waitAfterAppearing], timeout: 5.0)
     }
 
     func test_didUpdateSelectedAmount() throws {
@@ -190,7 +190,7 @@ final class HomeVMTests: XCTestCase {
             XCTAssertEqual(actual, expected)
             waitAfterDidUpdateAmount.fulfill()
         }
-        wait(for: [waitAfterDidUpdateAmount], timeout: 1.0)
+        wait(for: [waitAfterDidUpdateAmount], timeout: 5.0)
     }
     
     // MARK: Edge Cases
@@ -213,7 +213,7 @@ final class HomeVMTests: XCTestCase {
             XCTAssertEqual(displayMode.value, .empty, "currencyList is shown after inputing currency amount")
             waitAfterDidUpdateAmount.fulfill()
         }
-        wait(for: [waitAfterDidUpdateAmount], timeout: 1.0)
+        wait(for: [waitAfterDidUpdateAmount], timeout: 5.0)
     }
     
     func test_didUpdateSelectedAmount_error_on_getCurrenciesUseCase() throws {
@@ -233,7 +233,7 @@ final class HomeVMTests: XCTestCase {
             XCTAssertEqual(displayMode.value, .error, "currencyList is shown after inputing currency amount")
             waitAfterDidUpdateAmount.fulfill()
         }
-        wait(for: [waitAfterDidUpdateAmount], timeout: 1.0)
+        wait(for: [waitAfterDidUpdateAmount], timeout: 5.0)
     }
     
     
@@ -265,7 +265,7 @@ final class HomeVMTests: XCTestCase {
             }
             waitAfterAppearing.fulfill()
         }
-        wait(for: [waitAfterAppearing], timeout: 1.0)
+        wait(for: [waitAfterAppearing], timeout: 5.0)
     }
 }
 
