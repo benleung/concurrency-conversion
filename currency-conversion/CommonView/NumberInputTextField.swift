@@ -101,13 +101,13 @@ extension NumberInputTextField: UITextFieldDelegate {
 
 extension NumberInputTextField {
 
-    var numberPublisher: AnyPublisher<Double, Never> {
+    var numberPublisher: AnyPublisher<Double?, Never> {
         NotificationCenter.default.publisher(
             for: UITextField.textDidChangeNotification,
             object: self
         )
         .compactMap { ($0.object as? UITextField)?.text }
-        .compactMap { Double($0) }
+        .map { Double($0) }
         .eraseToAnyPublisher()
     }
 

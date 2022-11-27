@@ -10,14 +10,20 @@ import Foundation
 public class AppUserDefaults {
     enum UserDefaultsKey: String, CaseIterable {
         case exchangeRates
+        case exchangeRatesLastUpdated
         case currencyNames
+        case currencyNamesLastUpdated
 
         var initValue: Any? {
             switch self {
             case .exchangeRates:
                 return [String:Double]()
+            case .exchangeRatesLastUpdated:
+                return nil
             case .currencyNames:
                 return [String:String]()
+            case .currencyNamesLastUpdated:
+                return nil
             }
         }
     }
@@ -52,6 +58,26 @@ public class AppUserDefaults {
         }
         set {
             userDefaults.set(newValue, forKey: UserDefaultsKey.currencyNames.rawValue)
+        }
+    }
+
+    public var exchangeRatesLastUpdated: Date? {
+        get {
+            let timeIntervalSince1970 = userDefaults.double(forKey: UserDefaultsKey.exchangeRatesLastUpdated.rawValue) as Double?
+            return timeIntervalSince1970.map { Date(timeIntervalSince1970: $0) }
+        }
+        set {
+            userDefaults.set(newValue?.timeIntervalSince1970, forKey: UserDefaultsKey.exchangeRatesLastUpdated.rawValue)
+        }
+    }
+
+    public var currencyNamesLastUpdated: Date? {
+        get {
+            let timeIntervalSince1970 = userDefaults.double(forKey: UserDefaultsKey.currencyNamesLastUpdated.rawValue) as Double?
+            return timeIntervalSince1970.map { Date(timeIntervalSince1970: $0) }
+        }
+        set {
+            userDefaults.set(newValue?.timeIntervalSince1970, forKey: UserDefaultsKey.currencyNamesLastUpdated.rawValue)
         }
     }
 }

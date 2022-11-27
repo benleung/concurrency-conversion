@@ -53,13 +53,33 @@ final class HomeVC: UIViewController {
         return view
     }()
 
+    private var emptyView: UIView = {
+        let view = UILabel()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.text = "Please enter currency amount to display a list of currency"
+        view.numberOfLines = 2
+        view.textAlignment = .center
+        view.layoutMargins = UIEdgeInsets(top: 0, left: 50, bottom: 0, right: 50)
+        return view
+    }()
+
+    private var errorView: UIView = {
+        let view = UILabel()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.text = "An error has occurred. Please make sure you're connected to the Internet."
+        view.numberOfLines = 2
+        view.textAlignment = .center
+        view.layoutMargins = UIEdgeInsets(top: 0, left: 50, bottom: 0, right: 50)
+        return view
+    }()
+
     private lazy var dataSource: UICollectionViewDiffableDataSource<HomeModel.Section, HomeModel.Item> = {
         UICollectionViewDiffableDataSource<HomeModel.Section, HomeModel.Item>(collectionView: conversionResultCollection, cellProvider: { [weak self] collectionView, indexPath, item -> UICollectionViewCell? in
             guard let self = self else { return nil }
             
             switch item {
-            case .currencyBlock(let model):
-                let cell: Cell = collectionView.dequeueReusableCell(for: indexPath)
+            case .currencyItem(let model):
+                let cell: ConversionResultCell = collectionView.dequeueReusableCell(for: indexPath)
                 cell.configure(model, parent: self)
                 return cell
             }
@@ -77,12 +97,12 @@ final class HomeVC: UIViewController {
     }()
     
 
-    typealias Cell = HostingCell<ConversionResultCell>
+    typealias ConversionResultCell = HostingCell<ConversionResultView>
     
     private lazy var conversionResultCollection: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.register(Cell.self)
+        collectionView.register(ConversionResultCell.self)
         collectionView.backgroundColor = .white
         return collectionView
     }()
@@ -114,6 +134,8 @@ final class HomeVC: UIViewController {
         
         container.addArrangedSubview(headerHStack)
         container.addArrangedSubview(conversionResultCollection)
+        container.addArrangedSubview(emptyView)
+        container.addArrangedSubview(errorView)
         
         headerHStack.addArrangedSubview(amountInputView)
         headerHStack.addArrangedSubview(currencyDropdownButton)
@@ -136,7 +158,7 @@ final class HomeVC: UIViewController {
     private func binding() {
         // Input
         amountInputView.numberPublisher.debounce(for: 0.5, scheduler: DispatchQueue.main).sink { [weak self] in
-            self?.input.amount.send($0)
+            self?.input.didUpdateAmount.send($0)
         }.store(in: &cancellables)
         
         currencyDropdownButton.publisher(for: .touchUpInside).sink { [weak self] _ in
@@ -155,6 +177,12 @@ final class HomeVC: UIViewController {
                 let vc = UIHostingController(rootView: currencySelectView)
                 self.present(vc, animated: true)
             }.store(in: &cancellables)
+        
+        output.displayMode.sink { [weak self] in
+            self?.conversionResultCollection.isHidden = $0 != .currencyList
+            self?.emptyView.isHidden = $0 != .empty
+            self?.errorView.isHidden = $0 != .error
+        }.store(in: &cancellables)
         
         output.snapshot.sink { [weak self] snapshot in
             DispatchQueue.main.async {

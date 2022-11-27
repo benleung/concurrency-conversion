@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ConversionResultCell: HostingCellContent {
+struct ConversionResultView: HostingCellContent {
     public typealias Dependency = Model
 
     public struct Model: Hashable {

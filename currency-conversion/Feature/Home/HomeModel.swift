@@ -11,9 +11,15 @@ public enum HomeModel {
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Item>
 
     enum Section: Hashable {
-        case currencyBlockGrid
+        case currencyList
     }
     enum Item: Hashable {
-        case currencyBlock(ConversionResultCell.Model)
+        case currencyItem(ConversionResultView.Model)
+    }
+    
+    enum DisplayMode {
+        case currencyList
+        case empty
+        case error
     }
 }
