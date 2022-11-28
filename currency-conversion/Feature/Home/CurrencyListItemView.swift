@@ -6,8 +6,9 @@
 //
 
 import SwiftUI
+import Core
 
-struct ConversionResultView: HostingCellContent {
+struct CurrencyListItemView: HostingCellContent {
     public typealias Dependency = Model
 
     public struct Model: Hashable {

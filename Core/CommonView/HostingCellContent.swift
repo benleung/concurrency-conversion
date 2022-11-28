@@ -1,5 +1,5 @@
 //
-//  HostingReusableView.swift
+//  HostingCellContent.swift
 //  currency-conversion
 //
 //  Created by Ben Leung on 2022/11/25.
@@ -8,17 +8,18 @@
 import SwiftUI
 import UIKit
 
-protocol HostingReusableViewContent: View {
+public protocol HostingCellContent: View {
     associatedtype Dependency
     init(_ dependency: Dependency)
 }
 
-final class HostingReusableView<Content: HostingReusableViewContent>: UICollectionReusableView {
-    private let hostingController = UIHostingController<Content?>(rootView: nil)
+public final class HostingCell<Content: HostingCellContent>: UICollectionViewCell {
+    private let hostingController = FixSafeAreaInsetsHostingController<Content?>(rootView: nil)
 
     override public init(frame: CGRect) {
         super.init(frame: frame)
         hostingController.view.backgroundColor = .clear
+        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
     }
 
     @available(*, unavailable)
@@ -31,8 +32,9 @@ final class HostingReusableView<Content: HostingReusableViewContent>: UICollecti
         hostingController.view.invalidateIntrinsicContentSize()
 
         guard hostingController.parent == nil else { return }
+
         parent.addChild(hostingController)
-        addSubview(hostingController.view)
+        contentView.addSubview(hostingController.view)
         setupConstraints()
         hostingController.didMove(toParent: parent)
     }

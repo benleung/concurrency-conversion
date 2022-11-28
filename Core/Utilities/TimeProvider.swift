@@ -7,10 +7,12 @@
 
 import Foundation
 
-protocol TimeProvider {
+public protocol TimeProvider {
     func now() -> Date
 }
 
-struct TimeProviderImp: TimeProvider {
-    func now() -> Date { Date() }
+public struct TimeProviderImp: TimeProvider {
+    public func now() -> Date { Date() }
+    
+    public init() {}
 }

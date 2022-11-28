@@ -19,9 +19,9 @@ struct CurrencySelectView: View {
         let currencyNameWithAlias: String
     }
     let models: [Model]
-    let input: HomeVMInput
+    let input: HomeViewModelInput
 
-    public init(_ models: [Model], input: HomeVMInput, selectedCurrencyUnit: String) {
+    public init(_ models: [Model], input: HomeViewModelInput, selectedCurrencyUnit: String) {
         self.models = models
         self.input = input
         self.selectedCurrencyUnit = selectedCurrencyUnit

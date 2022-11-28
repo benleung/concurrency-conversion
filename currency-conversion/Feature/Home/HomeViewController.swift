@@ -1,5 +1,5 @@
 //
-//  HomeVC.swift
+//  HomeViewController.swift
 //  currency-conversion
 //
 //  Created by Ben Leung on 2022/11/24.
@@ -8,11 +8,12 @@
 import UIKit
 import Combine
 import SwiftUI
+import Core
 
-final class HomeVC: UIViewController {
+final class HomeViewController: UIViewController {
 
-    private var input: HomeVMInput
-    private var output: HomeVMOutput
+    private var input: HomeViewModelInput
+    private var output: HomeViewModelOutput
 
     private var container: UIStackView  = {
         let stackview = UIStackView()
@@ -32,7 +33,7 @@ final class HomeVC: UIViewController {
         return stackview
     }()
     
-    private var amountInputView: NumberInputTextField = {
+    private var amountInputTextField: NumberInputTextField = {
         let view = NumberInputTextField()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.placeholder = "Enter the currency amount here"
@@ -41,22 +42,22 @@ final class HomeVC: UIViewController {
         return view
     }()
 
-    private var currencyDropdownButton: UIButton = {
+    private var currencySelectButton: UIButton = {
         let view = UIButton()
         view.translatesAutoresizingMaskIntoConstraints = false
-
         view.setImage(UIImage(systemName: "chevron.down"), for: .normal)
         view.setTitle("USD", for: .normal)
         view.setTitleColor(.systemBlue, for: .normal)
         view.semanticContentAttribute = .forceRightToLeft
-        
+        view.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         return view
     }()
 
     private var emptyView: UIView = {
         let view = UILabel()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.text = "Please enter currency amount to display a list of currency"
+        view.text = "Please enter currency amount \nto display a list of currency"
+        view.textColor = .darkGray
         view.numberOfLines = 2
         view.textAlignment = .center
         view.layoutMargins = UIEdgeInsets(top: 0, left: 50, bottom: 0, right: 50)
@@ -74,35 +75,28 @@ final class HomeVC: UIViewController {
     }()
 
     private lazy var dataSource: UICollectionViewDiffableDataSource<HomeModel.Section, HomeModel.Item> = {
-        UICollectionViewDiffableDataSource<HomeModel.Section, HomeModel.Item>(collectionView: conversionResultCollection, cellProvider: { [weak self] collectionView, indexPath, item -> UICollectionViewCell? in
+        UICollectionViewDiffableDataSource<HomeModel.Section, HomeModel.Item>(collectionView: currencyListCollectionView, cellProvider: { [weak self] collectionView, indexPath, item -> UICollectionViewCell? in
             guard let self = self else { return nil }
             
             switch item {
             case .currencyItem(let model):
-                let cell: ConversionResultCell = collectionView.dequeueReusableCell(for: indexPath)
+                let cell: HostingCell<CurrencyListItemView> = collectionView.dequeueReusableCell(for: indexPath)
                 cell.configure(model, parent: self)
                 return cell
             }
         })
     }()
-    
-    private lazy var collectionViewLayout: UICollectionViewLayout = {
+
+    private lazy var currencyListCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         layout.minimumInteritemSpacing = 10
         layout.minimumLineSpacing = 10
         layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        return layout
-    }()
-    
-
-    typealias ConversionResultCell = HostingCell<ConversionResultView>
-    
-    private lazy var conversionResultCollection: UICollectionView = {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.register(ConversionResultCell.self)
+        collectionView.register(HostingCell<CurrencyListItemView>.self)
         collectionView.backgroundColor = .white
         return collectionView
     }()
@@ -110,8 +104,8 @@ final class HomeVC: UIViewController {
     private var cancellables = Set<AnyCancellable>()
 
     init() {
-        input = HomeVMInput()
-        output = HomeVM(input: input)
+        input = HomeViewModelInput()
+        output = HomeViewModel(input: input)
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -133,12 +127,12 @@ final class HomeVC: UIViewController {
         view.addSubview(container)
         
         container.addArrangedSubview(headerHStack)
-        container.addArrangedSubview(conversionResultCollection)
+        container.addArrangedSubview(currencyListCollectionView)
         container.addArrangedSubview(emptyView)
         container.addArrangedSubview(errorView)
         
-        headerHStack.addArrangedSubview(amountInputView)
-        headerHStack.addArrangedSubview(currencyDropdownButton)
+        headerHStack.addArrangedSubview(amountInputTextField)
+        headerHStack.addArrangedSubview(currencySelectButton)
         
         view.backgroundColor = .white
         
@@ -151,35 +145,41 @@ final class HomeVC: UIViewController {
             container.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10.0),
             container.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             container.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 0.0),
-            container.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: 0.0)
+            container.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: 0.0),
+            currencySelectButton.widthAnchor.constraint(equalToConstant: 55)
         ])
     }
 
     private func binding() {
-        // Input
-        amountInputView.numberPublisher.debounce(for: 0.5, scheduler: DispatchQueue.main).sink { [weak self] in
+        // MARK: Input Binding
+        
+        // debounce() is used to prevent UI overburdening fo displaying a list of currency and input process of each character (by publishing input amount update only after a 0.5 seconds)
+        amountInputTextField.numberPublisher.debounce(for: 0.5, scheduler: DispatchQueue.main).sink { [weak self] in
             self?.input.didUpdateAmount.send($0)
         }.store(in: &cancellables)
         
-        currencyDropdownButton.publisher(for: .touchUpInside).sink { [weak self] _ in
+        currencySelectButton.publisher(for: .touchUpInside).sink { [weak self] _ in
             self?.input.didTapCurrencyDropDownView.send()
         }.store(in: &cancellables)        
         
-        // Output
+        // MARK: Output Binding
+
         output.selectedCurrencyUnit
-            .sink {
-                self.currencyDropdownButton.setTitle($0, for: .normal)
+            .sink { [weak self] in
+                self?.currencySelectButton.setTitle($0, for: .normal)
             }.store(in: &cancellables)
-        
+
         output.openCurrencySelectModal
-            .sink {
+            .sink { [weak self] in
+                guard let self = self else { return }
+
                 let currencySelectView = CurrencySelectView($0.list, input: self.input, selectedCurrencyUnit: $0.selected)
                 let vc = UIHostingController(rootView: currencySelectView)
                 self.present(vc, animated: true)
             }.store(in: &cancellables)
-        
+
         output.displayMode.sink { [weak self] in
-            self?.conversionResultCollection.isHidden = $0 != .currencyList
+            self?.currencyListCollectionView.isHidden = $0 != .currencyList
             self?.emptyView.isHidden = $0 != .empty
             self?.errorView.isHidden = $0 != .error
         }.store(in: &cancellables)

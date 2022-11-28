@@ -1,5 +1,5 @@
 //
-//  HomeVM.swift
+//  HomeViewModel.swift
 //  currency-conversion
 //
 //  Created by Ben Leung on 2022/11/24.
@@ -9,21 +9,22 @@ import Combine
 import UIKit
 import OrderedCollections
 
-struct HomeVMInput {
+struct HomeViewModelInput {
     var didUpdateAmount = PassthroughSubject<Double?, Never>()
     var didTapCurrencyDropDownView = PassthroughSubject<Void, Never>()
     var didSelectedCurrency = PassthroughSubject<String, Never>()
     var viewWillAppear = PassthroughSubject<Void, Never>()
 }
-protocol HomeVMOutput {
+
+protocol HomeViewModelOutput {
     var openCurrencySelectModal: AnyPublisher<(list: [CurrencySelectView.Model], selected: String), Never> { get }
     var selectedCurrencyUnit: AnyPublisher<String, Never> { get }
     var displayMode: AnyPublisher<HomeModel.DisplayMode, Never> { get }
     var snapshot: AnyPublisher<HomeModel.Snapshot, Never> { get }
 }
 
-final class HomeVM: HomeVMOutput {
-    private let input: HomeVMInput
+final class HomeViewModel: HomeViewModelOutput {
+    private let input: HomeViewModelInput
     private var cancellables = Set<AnyCancellable>()
 
     // MARK: Output
@@ -78,7 +79,7 @@ final class HomeVM: HomeVMOutput {
     private var currencyNames = CurrentValueSubject<[String: String]?, Never>(nil)
     private var currencies = CurrentValueSubject<OrderedDictionary<String, GetCurrenciesUseCaseIO.Output.Currency>, Never>([:])
     
-    init(input: HomeVMInput, getCurrenciesUseCase: GetCurrenciesUseCase = GetCurrenciesUseCaseImp()) {
+    init(input: HomeViewModelInput, getCurrenciesUseCase: GetCurrenciesUseCase = GetCurrenciesUseCaseImp()) {
         self.input = input
         
         // snapshot
@@ -94,11 +95,11 @@ final class HomeVM: HomeVMOutput {
                 }
 
                 var snapshot = HomeModel.Snapshot()
-                var items: [ConversionResultView.Model] = []
+                var items: [CurrencyListItemView.Model] = []
                 
                 for currency in currencies.values {
                     let calculatedAmount = self.getCurrencyAmount(fromRate: selectedCurrencyRate, toRate: currency.rate, fromAmount: amount)
-                    items.append(ConversionResultView.Model(
+                    items.append(CurrencyListItemView.Model(
                         currencyAlias: currency.symbol,
                         currencyName: currency.name,
                         amount: String(format: "%.2f", calculatedAmount)

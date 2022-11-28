@@ -14,7 +14,7 @@ public enum HomeModel {
         case currencyList
     }
     enum Item: Hashable {
-        case currencyItem(ConversionResultView.Model)
+        case currencyItem(CurrencyListItemView.Model)
     }
     
     enum DisplayMode {

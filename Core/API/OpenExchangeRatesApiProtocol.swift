@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol OpenExchangeRatesApiProtocol {
+public protocol OpenExchangeRatesApiProtocol {
     var path: String { get }
 }
 
@@ -23,7 +23,7 @@ extension OpenExchangeRatesApiProtocol {
         return url
     }
 
-    func perform<T: Decodable>(decode decodable: T.Type) async throws -> T {
+    public func perform<T: Decodable>(decode decodable: T.Type) async throws -> T {
         let (data, _) = try await URLSession.shared.data(from: url)
         guard let result = try? JSONDecoder().decode(T.self, from: data) else {
             throw APIError.unexpected
@@ -31,7 +31,7 @@ extension OpenExchangeRatesApiProtocol {
         return result
     }
 
-    func perform() async throws -> [String: String] {
+    public func perform() async throws -> [String: String] {
         let (data, _) = try await URLSession.shared.data(from: url)
         guard let result = try JSONSerialization.jsonObject(with: data, options: []) as? [String: String] else {
             throw APIError.unexpected

@@ -1,5 +1,5 @@
 //
-//  HomeVMTests.swift
+//  HomeViewModelTests.swift
 //  currency-conversionTests
 //
 //  Created by Ben Leung on 2022/11/26.
@@ -9,7 +9,7 @@ import XCTest
 import OrderedCollections
 @testable import currency_conversion
 
-final class HomeVMTests: XCTestCase {
+final class HomeViewModelTests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -22,8 +22,8 @@ final class HomeVMTests: XCTestCase {
     // MARK: major scenarios
     func test_viewWillAppear() throws {
         // Arrange
-        let input = HomeVMInput()
-        let output: HomeVMOutput = HomeVM(input: input, getCurrenciesUseCase: GetCurrenciesUseCaseSuccessMock())
+        let input = HomeViewModelInput()
+        let output: HomeViewModelOutput = HomeViewModel(input: input, getCurrenciesUseCase: GetCurrenciesUseCaseSuccessMock())
         let displayMode = TestableSubscriber<HomeModel.DisplayMode, Never>()
         output.displayMode.receive(subscriber: displayMode)
         
@@ -37,8 +37,8 @@ final class HomeVMTests: XCTestCase {
 
     func test_didUpdateAmount() throws {
         // Arrange
-        let input = HomeVMInput()
-        let output: HomeVMOutput = HomeVM(input: input, getCurrenciesUseCase: GetCurrenciesUseCaseSuccessMock())
+        let input = HomeViewModelInput()
+        let output: HomeViewModelOutput = HomeViewModel(input: input, getCurrenciesUseCase: GetCurrenciesUseCaseSuccessMock())
         let displayMode = TestableSubscriber<HomeModel.DisplayMode, Never>()
         output.displayMode.receive(subscriber: displayMode)
         
@@ -53,16 +53,16 @@ final class HomeVMTests: XCTestCase {
             let snapshot = TestableSubscriber<HomeModel.Snapshot, Never>()
             output.snapshot.receive(subscriber: snapshot)
             
-            let actual: [ConversionResultView.Model] = snapshot.value.itemIdentifiers.compactMap {
+            let actual: [CurrencyListItemView.Model] = snapshot.value.itemIdentifiers.compactMap {
                 if case let HomeModel.Item.currencyItem(model) = $0 {
                     return model
                 }
                 return nil
             }
             let expected = [
-                ConversionResultView.Model(currencyAlias: "HKD", currencyName: "Hong Kong Dollar", amount: "78.17"), // 10 USD = 7.81686*10 HKD
-                ConversionResultView.Model(currencyAlias: "JPY", currencyName: "Japanese Yen", amount: "1391.20"), // 10 USD = 139.12*10 JPY
-                ConversionResultView.Model(currencyAlias: "USD", currencyName: "United States Dollar", amount: "10.00"), // 10 USD
+                CurrencyListItemView.Model(currencyAlias: "HKD", currencyName: "Hong Kong Dollar", amount: "78.17"), // 10 USD = 7.81686*10 HKD
+                CurrencyListItemView.Model(currencyAlias: "JPY", currencyName: "Japanese Yen", amount: "1391.20"), // 10 USD = 139.12*10 JPY
+                CurrencyListItemView.Model(currencyAlias: "USD", currencyName: "United States Dollar", amount: "10.00"), // 10 USD
                 
             ]
             XCTAssertEqual(actual, expected)
@@ -73,8 +73,8 @@ final class HomeVMTests: XCTestCase {
 
     func test_didTapCurrencyDropDownView_afterViewAppeared() throws {
         // Arrange
-        let input = HomeVMInput()
-        let output: HomeVMOutput = HomeVM(input: input, getCurrenciesUseCase: GetCurrenciesUseCaseSuccessMock())
+        let input = HomeViewModelInput()
+        let output: HomeViewModelOutput = HomeViewModel(input: input, getCurrenciesUseCase: GetCurrenciesUseCaseSuccessMock())
         let openCurrencySelectModal = TestableSubscriber<(list: [CurrencySelectView.Model], selected: String), Never>()
         output.openCurrencySelectModal.receive(subscriber: openCurrencySelectModal)
         
@@ -120,8 +120,8 @@ final class HomeVMTests: XCTestCase {
 
     func test_didTapCurrencyDropDownView_afterSelectedAnotherCurrency() throws {
         // Arrange
-        let input = HomeVMInput()
-        let output: HomeVMOutput = HomeVM(input: input, getCurrenciesUseCase: GetCurrenciesUseCaseSuccessMock())
+        let input = HomeViewModelInput()
+        let output: HomeViewModelOutput = HomeViewModel(input: input, getCurrenciesUseCase: GetCurrenciesUseCaseSuccessMock())
         let openCurrencySelectModal = TestableSubscriber<(list: [CurrencySelectView.Model], selected: String), Never>()
         output.openCurrencySelectModal.receive(subscriber: openCurrencySelectModal)
         
@@ -158,8 +158,8 @@ final class HomeVMTests: XCTestCase {
 
     func test_didUpdateSelectedAmount() throws {
         // Arrange
-        let input = HomeVMInput()
-        let output: HomeVMOutput = HomeVM(input: input, getCurrenciesUseCase: GetCurrenciesUseCaseSuccessMock())
+        let input = HomeViewModelInput()
+        let output: HomeViewModelOutput = HomeViewModel(input: input, getCurrenciesUseCase: GetCurrenciesUseCaseSuccessMock())
         let displayMode = TestableSubscriber<HomeModel.DisplayMode, Never>()
         output.displayMode.receive(subscriber: displayMode)
         
@@ -175,16 +175,16 @@ final class HomeVMTests: XCTestCase {
             let snapshot = TestableSubscriber<HomeModel.Snapshot, Never>()
             output.snapshot.receive(subscriber: snapshot)
             
-            let actual: [ConversionResultView.Model] = snapshot.value.itemIdentifiers.compactMap {
+            let actual: [CurrencyListItemView.Model] = snapshot.value.itemIdentifiers.compactMap {
                 if case let HomeModel.Item.currencyItem(model) = $0 {
                     return model
                 }
                 return nil
             }
             let expected = [
-                ConversionResultView.Model(currencyAlias: "HKD", currencyName: "Hong Kong Dollar", amount: "10.00"), // 10 HKD
-                ConversionResultView.Model(currencyAlias: "JPY", currencyName: "Japanese Yen", amount: "177.97"), // 10 HKD = 10 / 7.81686 * 139.12 = 177.97 JPY
-                ConversionResultView.Model(currencyAlias: "USD", currencyName: "United States Dollar", amount: "1.28"), // 10 HKD = 10 / 7.81686 = 1.28 USD
+                CurrencyListItemView.Model(currencyAlias: "HKD", currencyName: "Hong Kong Dollar", amount: "10.00"), // 10 HKD
+                CurrencyListItemView.Model(currencyAlias: "JPY", currencyName: "Japanese Yen", amount: "177.97"), // 10 HKD = 10 / 7.81686 * 139.12 = 177.97 JPY
+                CurrencyListItemView.Model(currencyAlias: "USD", currencyName: "United States Dollar", amount: "1.28"), // 10 HKD = 10 / 7.81686 = 1.28 USD
                 
             ]
             XCTAssertEqual(actual, expected)
@@ -197,8 +197,8 @@ final class HomeVMTests: XCTestCase {
     
     func test_didUpdateSelectedAmount_clearing_textfield() {
         // Arrange
-        let input = HomeVMInput()
-        let output: HomeVMOutput = HomeVM(input: input, getCurrenciesUseCase: GetCurrenciesUseCaseSuccessMock()) // note: GetCurrenciesUseCaseErrorMock to simulate error occurred while fetching data
+        let input = HomeViewModelInput()
+        let output: HomeViewModelOutput = HomeViewModel(input: input, getCurrenciesUseCase: GetCurrenciesUseCaseSuccessMock()) // note: GetCurrenciesUseCaseErrorMock to simulate error occurred while fetching data
         let displayMode = TestableSubscriber<HomeModel.DisplayMode, Never>()
         output.displayMode.receive(subscriber: displayMode)
         
@@ -218,8 +218,8 @@ final class HomeVMTests: XCTestCase {
     
     func test_didUpdateSelectedAmount_error_on_getCurrenciesUseCase() throws {
         // Arrange
-        let input = HomeVMInput()
-        let output: HomeVMOutput = HomeVM(input: input, getCurrenciesUseCase: GetCurrenciesUseCaseErrorMock()) // note: GetCurrenciesUseCaseErrorMock to simulate error occurred while fetching data
+        let input = HomeViewModelInput()
+        let output: HomeViewModelOutput = HomeViewModel(input: input, getCurrenciesUseCase: GetCurrenciesUseCaseErrorMock()) // note: GetCurrenciesUseCaseErrorMock to simulate error occurred while fetching data
         let displayMode = TestableSubscriber<HomeModel.DisplayMode, Never>()
         output.displayMode.receive(subscriber: displayMode)
         
@@ -239,8 +239,8 @@ final class HomeVMTests: XCTestCase {
     
     func test_didTapCurrencyDropDownView_error_on_getCurrenciesUseCase() throws {
         // Arrange
-        let input = HomeVMInput()
-        let output: HomeVMOutput = HomeVM(input: input, getCurrenciesUseCase: GetCurrenciesUseCaseErrorMock())
+        let input = HomeViewModelInput()
+        let output: HomeViewModelOutput = HomeViewModel(input: input, getCurrenciesUseCase: GetCurrenciesUseCaseErrorMock())
         let openCurrencySelectModal = TestableSubscriber<(list: [CurrencySelectView.Model], selected: String), Never>()
         output.openCurrencySelectModal.receive(subscriber: openCurrencySelectModal)
         

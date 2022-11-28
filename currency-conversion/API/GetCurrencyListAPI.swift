@@ -5,7 +5,7 @@
 //  Created by Ben Leung on 2022/11/26.
 //
 
-import Foundation
+import Core
 
 class GetCurrencyListAPI : OpenExchangeRatesApiProtocol {
     var path: String = "currencies.json"

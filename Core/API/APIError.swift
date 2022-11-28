@@ -6,7 +6,7 @@
 //
 
 import Foundation
-enum APIError: Error {
+public enum APIError: Error {
     case badResponse(Int?) // response code
     case custom(Error)
     case unexpected

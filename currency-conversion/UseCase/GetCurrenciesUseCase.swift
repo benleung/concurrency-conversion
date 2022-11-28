@@ -7,6 +7,7 @@
 
 import Foundation
 import OrderedCollections
+import Core
 
 protocol GetCurrenciesUseCase {
     func execute() async throws -> GetCurrenciesUseCaseIO.Output

@@ -5,7 +5,7 @@
 //  Created by Ben Leung on 2022/11/26.
 //
 
-import Foundation
+import Core
 
 class GetLatestExchangeRateAPI: OpenExchangeRatesApiProtocol {
     var path: String = "latest.json"

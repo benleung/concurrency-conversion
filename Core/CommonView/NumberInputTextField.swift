@@ -8,8 +8,8 @@
 import UIKit
 import Combine
 
-final class NumberInputTextField: UITextField {
-    init() {
+public final class NumberInputTextField: UITextField {
+    public init() {
         super.init(frame: .zero)
         keyboardType = .numberPad
         delegate = self
@@ -17,7 +17,7 @@ final class NumberInputTextField: UITextField {
         spellCheckingType = .no
     }
 
-    func makeNumberString(from str: String) -> String {
+    private func makeNumberString(from str: String) -> String {
         guard let double = Double(str.replacingOccurrences(of: "^\\.", with: "0\\.", options: .regularExpression, range: nil)) else {
             return "0"
         }
@@ -31,18 +31,10 @@ final class NumberInputTextField: UITextField {
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-//    func configure(value: Double?) {
-//        if let v = value {
-//            text = makeNumberString(from: String(v))
-//        } else {
-//            text = makeNumberString(from: "0")
-//        }
-//    }
 }
 
 extension NumberInputTextField: UITextFieldDelegate {
-    func textFieldDidBeginEditing(_ textField: UITextField) {
+    public func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.becomeFirstResponder()
 //        guard let currentText = text else {
 //            text = ""
@@ -51,7 +43,7 @@ extension NumberInputTextField: UITextFieldDelegate {
 //        text = (currentText == "0" || currentText == "0.0") ? "" : makeNumberString(from: currentText)
     }
 
-    func textFieldDidEndEditing(_ textField: UITextField) {
+    public func textFieldDidEndEditing(_ textField: UITextField) {
         textField.resignFirstResponder()
         guard let text = textField.text, !text.isEmpty else {
             textField.text = makeNumberString(from: "0.0")
@@ -62,7 +54,7 @@ extension NumberInputTextField: UITextFieldDelegate {
         textField.text = str
     }
 
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
         guard let text = textField.text, let textRange = Range(range, in: text) else {
            return false
@@ -98,10 +90,8 @@ extension NumberInputTextField: UITextFieldDelegate {
     }
 }
 
-
 extension NumberInputTextField {
-
-    var numberPublisher: AnyPublisher<Double?, Never> {
+    public var numberPublisher: AnyPublisher<Double?, Never> {
         NotificationCenter.default.publisher(
             for: UITextField.textDidChangeNotification,
             object: self
