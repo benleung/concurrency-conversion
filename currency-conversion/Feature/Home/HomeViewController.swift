@@ -67,7 +67,8 @@ final class HomeViewController: UIViewController {
     private var errorView: UIView = {
         let view = UILabel()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.text = "An error has occurred. Please make sure you're connected to the Internet."
+        view.text = "An error has occurred. Please make sure \nyou're connected to the Internet."
+        view.textColor = .darkGray
         view.numberOfLines = 2
         view.textAlignment = .center
         view.layoutMargins = UIEdgeInsets(top: 0, left: 50, bottom: 0, right: 50)
@@ -93,7 +94,11 @@ final class HomeViewController: UIViewController {
         layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         layout.minimumInteritemSpacing = 10
         layout.minimumLineSpacing = 10
-        layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        
+        //  Size Adjust for iPod Touch
+        let horizontalPadding: CGFloat = UIScreen.main.bounds.width > 370 ? 10 : 30
+        
+        layout.sectionInset = UIEdgeInsets(top: 10, left: horizontalPadding, bottom: 10, right: horizontalPadding)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(HostingCell<CurrencyListItemView>.self)
@@ -146,7 +151,7 @@ final class HomeViewController: UIViewController {
             container.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             container.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 0.0),
             container.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: 0.0),
-            currencySelectButton.widthAnchor.constraint(equalToConstant: 55)
+            currencySelectButton.widthAnchor.constraint(equalToConstant: 60)
         ])
     }
 

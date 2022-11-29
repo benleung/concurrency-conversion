@@ -102,7 +102,7 @@ final class HomeViewModel: HomeViewModelOutput {
                     items.append(CurrencyListItemView.Model(
                         currencyAlias: currency.symbol,
                         currencyName: currency.name,
-                        amount: String(format: "%.2f", calculatedAmount)
+                        amount: calculatedAmount
                     ))
                 }
 
@@ -140,8 +140,16 @@ final class HomeViewModel: HomeViewModelOutput {
         fromRate: Double,
         toRate: Double,
         fromAmount: Double
-    ) -> Double {
-        return (fromAmount / fromRate) * toRate
+    ) -> String {
+        let calculatedAmount = (fromAmount / fromRate) * toRate
+        let numberFormatter = NumberFormatter()
+        numberFormatter.groupingSeparator = ","
+        numberFormatter.groupingSize = 3
+        numberFormatter.usesGroupingSeparator = true
+        numberFormatter.decimalSeparator = "."
+        numberFormatter.numberStyle = .decimal
+        numberFormatter.maximumFractionDigits = 2
+        return numberFormatter.string(from: calculatedAmount as NSNumber) ?? "-"
     }
 }
 

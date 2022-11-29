@@ -7,6 +7,7 @@
 
 import XCTest
 import OrderedCollections
+import Core
 @testable import currency_conversion
 
 final class GetCurrenciesUseCaseTests: XCTestCase {
@@ -224,7 +225,7 @@ final class GetCurrenciesUseCaseTests: XCTestCase {
     }
 }
 
-private class MockTimeProvider: TimeProvider {
+private class MockTimeProvider: TimeProviderProtocol {
     var currentDate: Date
     
     init(currentDate: Date = Date()) {

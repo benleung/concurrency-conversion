@@ -29,10 +29,11 @@ struct CurrencyListItemView: HostingCellContent {
             Text(model.currencyAlias)
                 .font(.headline)
             Text(model.currencyName)
+                .foregroundColor(Color.gray)
                 .font(.footnote)
         }
         .padding(10)
-        .frame(width: 115, height: 115)
+        .frame(width: 110, height: 110, alignment: .top)
         .background(Color.white)
         .cornerRadius(6)
         .clipped()

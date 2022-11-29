@@ -7,6 +7,7 @@
 
 import XCTest
 import OrderedCollections
+import Core
 @testable import currency_conversion
 
 final class HomeViewModelTests: XCTestCase {
@@ -61,8 +62,8 @@ final class HomeViewModelTests: XCTestCase {
             }
             let expected = [
                 CurrencyListItemView.Model(currencyAlias: "HKD", currencyName: "Hong Kong Dollar", amount: "78.17"), // 10 USD = 7.81686*10 HKD
-                CurrencyListItemView.Model(currencyAlias: "JPY", currencyName: "Japanese Yen", amount: "1391.20"), // 10 USD = 139.12*10 JPY
-                CurrencyListItemView.Model(currencyAlias: "USD", currencyName: "United States Dollar", amount: "10.00"), // 10 USD
+                CurrencyListItemView.Model(currencyAlias: "JPY", currencyName: "Japanese Yen", amount: "1,391.2"), // 10 USD = 139.12*10 JPY
+                CurrencyListItemView.Model(currencyAlias: "USD", currencyName: "United States Dollar", amount: "10"), // 10 USD
                 
             ]
             XCTAssertEqual(actual, expected)
@@ -182,7 +183,7 @@ final class HomeViewModelTests: XCTestCase {
                 return nil
             }
             let expected = [
-                CurrencyListItemView.Model(currencyAlias: "HKD", currencyName: "Hong Kong Dollar", amount: "10.00"), // 10 HKD
+                CurrencyListItemView.Model(currencyAlias: "HKD", currencyName: "Hong Kong Dollar", amount: "10"), // 10 HKD
                 CurrencyListItemView.Model(currencyAlias: "JPY", currencyName: "Japanese Yen", amount: "177.97"), // 10 HKD = 10 / 7.81686 * 139.12 = 177.97 JPY
                 CurrencyListItemView.Model(currencyAlias: "USD", currencyName: "United States Dollar", amount: "1.28"), // 10 HKD = 10 / 7.81686 = 1.28 USD
                 

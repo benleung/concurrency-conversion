@@ -8,12 +8,10 @@
 import UIKit
 import SwiftUI
 
-/// fixSafeAreaInsets を一度だけ実行するためのフラグ
-private var fixSafeAreaInsetsHostingControllerIsFixed = false
-
-/// UIHostingController の view のレイアウトが safe area の影響を受けてしまう問題のワークアラウンドのために利用する
+/// A wrapper for HostingController to work around a known bug that safe area affect the View's vertical location
 public final class FixSafeAreaInsetsHostingController<Content: View>: UIHostingController<Content> {
-
+    /// fixSafeAreaInsets() should only be called once only
+    private var fixSafeAreaInsetsHostingControllerIsFixed = false
     override public init(rootView: Content) {
         super.init(rootView: rootView)
         if !fixSafeAreaInsetsHostingControllerIsFixed {
@@ -27,7 +25,7 @@ public final class FixSafeAreaInsetsHostingController<Content: View>: UIHostingC
         fatalError("init(coder:) has not been implemented")
     }
 
-    /// view の safe area を強制的になくす
+    /// remove view's safe area forcibly
     private func fixSafeAreaInsets() {
         let viewClass: AnyClass = view.classForCoder
 

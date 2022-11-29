@@ -7,6 +7,7 @@
 
 import Combine
 
+// note: this is not a test, but an utility class to assist writing tests
 final class TestableSubscriber<Input, Failure>: Subscriber where Failure: Error {
     private(set) var value: Input!
     private(set) var successCallCount: Int = 0

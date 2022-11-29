@@ -28,12 +28,12 @@ struct GetCurrenciesUseCaseIO : Codable {
 
 struct GetCurrenciesUseCaseImp: GetCurrenciesUseCase {
     private let cacheExpireSeconds: TimeInterval = 60*30 // 30 mintues
-    private let timeProvider: TimeProvider
+    private let timeProvider: TimeProviderProtocol
     private let getCurrencyListAPI: GetCurrencyListAPI
     private let getLatestExchangeRateAPI: GetLatestExchangeRateAPI
     
     init(
-        timeProvider: TimeProvider = TimeProviderImp(),
+        timeProvider: TimeProviderProtocol = TimeProvider(),
         getCurrencyListAPI: GetCurrencyListAPI = GetCurrencyListAPI(),
         getLatestExchangeRateAPI: GetLatestExchangeRateAPI = GetLatestExchangeRateAPI()
     ) {
@@ -43,8 +43,8 @@ struct GetCurrenciesUseCaseImp: GetCurrenciesUseCase {
     }
     
     func execute() async throws -> GetCurrenciesUseCaseIO.Output {
-        // FIXME: should use async let
-        let currencyNames: [String: String] = try await {
+        // note: fetch currencyNames and exchangeRates asynchronously in parallel for better performance
+        async let asyncCurrencyNames: [String: String] = {
             let secondsSinceLastCached = timeProvider.now().timeIntervalSinceReferenceDate - (AppUserDefaults.shared.currencyNamesLastUpdated ?? Date.distantPast).timeIntervalSinceReferenceDate
             if secondsSinceLastCached >= cacheExpireSeconds {
                 // cache expires and need refresh
@@ -54,7 +54,7 @@ struct GetCurrenciesUseCaseImp: GetCurrenciesUseCase {
             return AppUserDefaults.shared.currencyNames
         }()
 
-        let exchangeRates: [String : Double] = try await {
+        async let asyncExchangeRates: [String : Double] = {
             let secondsSinceLastCached = timeProvider.now().timeIntervalSinceReferenceDate - (AppUserDefaults.shared.exchangeRatesLastUpdated ?? Date.distantPast).timeIntervalSinceReferenceDate
             if secondsSinceLastCached >= cacheExpireSeconds {
                 // cache expires and need refresh
@@ -63,6 +63,8 @@ struct GetCurrenciesUseCaseImp: GetCurrenciesUseCase {
             }
             return AppUserDefaults.shared.exchangeRates
         }()
+        
+        let (currencyNames, exchangeRates) = try await (asyncCurrencyNames, asyncExchangeRates)
         
         var currencies = OrderedDictionary<String, GetCurrenciesUseCaseIO.Output.Currency>()
         for symbol in exchangeRates.keys.sorted() {

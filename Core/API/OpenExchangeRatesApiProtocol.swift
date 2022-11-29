@@ -24,7 +24,16 @@ extension OpenExchangeRatesApiProtocol {
     }
 
     public func perform<T: Decodable>(decode decodable: T.Type) async throws -> T {
-        let (data, _) = try await URLSession.shared.data(from: url)
+        let (data, response) = try await URLSession.shared.data(from: url)
+
+        guard let response = response as? HTTPURLResponse else {
+            throw APIError.badResponse(nil)
+        }
+
+        guard (200...299).contains(response.statusCode) else {
+            throw APIError.badResponse(response.statusCode)
+        }
+        
         guard let result = try? JSONDecoder().decode(T.self, from: data) else {
             throw APIError.unexpected
         }

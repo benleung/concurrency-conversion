@@ -19,9 +19,4 @@ public extension UICollectionView {
     func register(_ cellClass: UICollectionViewCell.Type) {
         register(cellClass, forCellWithReuseIdentifier: String(describing: cellClass))
     }
-
-    // FIXME: this is not used?
-    func register(_ viewClass: UICollectionReusableView.Type, kind: String) {
-        register(viewClass, forSupplementaryViewOfKind: kind, withReuseIdentifier: String(describing: viewClass))
-    }
 }
