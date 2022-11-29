@@ -1,5 +1,5 @@
 //
-//  ConversionResultCell.swift
+//  CurrencyListItemView.swift
 //  currency-conversion
 //
 //  Created by Ben Leung on 2022/11/25.
@@ -8,6 +8,7 @@
 import SwiftUI
 import Core
 
+/// a currency block containing calcuated amount, current symbol and full name
 struct CurrencyListItemView: HostingCellContent {
     public typealias Dependency = Model
 

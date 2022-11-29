@@ -8,6 +8,8 @@
 import Combine
 import UIKit
 
+/// A syntax sugar to subscribe UIKit's UIControl.Event
+/// example use: button.publisher(for: .touchUpInside).sink { ... }
 private class EventControlSubscription<EventSubscriber: Subscriber>: Subscription where EventSubscriber.Input == UIControl, EventSubscriber.Failure == Never {
     let control: UIControl
     let event: UIControl.Event

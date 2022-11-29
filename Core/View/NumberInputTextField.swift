@@ -8,6 +8,7 @@
 import UIKit
 import Combine
 
+/// A Textfield for user to input decimal numbers
 public final class NumberInputTextField: UITextField {
     public init() {
         super.init(frame: .zero)
@@ -29,8 +30,7 @@ extension NumberInputTextField: UITextFieldDelegate {
         guard let text = textField.text, let textRange = Range(range, in: text) else {
            return false
         }
-        
-        // check whether should change characters
+
         let updatedText = text.replacingCharacters(in: textRange, with: string)
         return isValidDecimalString(text: updatedText)
     }

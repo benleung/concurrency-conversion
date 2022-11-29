@@ -11,6 +11,7 @@ public protocol OpenExchangeRatesApiProtocol {
     var path: String { get }
 }
 
+/// protocol for calling openexchangerates api
 extension OpenExchangeRatesApiProtocol {
     private var baseUrl: String { "https://openexchangerates.org/api/" }
     private var queryParamKeyAppId: String { "app_id" }

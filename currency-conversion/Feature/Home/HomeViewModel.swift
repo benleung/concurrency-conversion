@@ -9,6 +9,8 @@ import Combine
 import UIKit
 import OrderedCollections
 
+/// Event Sources (View's lifecycle, UI Events) that might trigger an update on UI
+/// Input from ViewController to ViewModel
 struct HomeViewModelInput {
     var didUpdateAmount = PassthroughSubject<Double?, Never>()
     var didTapCurrencyDropDownView = PassthroughSubject<Void, Never>()
@@ -16,6 +18,8 @@ struct HomeViewModelInput {
     var viewWillAppear = PassthroughSubject<Void, Never>()
 }
 
+/// Data for UI's updates
+/// Output from ViewModel to ViewController
 protocol HomeViewModelOutput {
     var openCurrencySelectModal: AnyPublisher<(list: [CurrencySelectView.Model], selected: String), Never> { get }
     var selectedCurrencyUnit: AnyPublisher<String, Never> { get }
@@ -23,6 +27,9 @@ protocol HomeViewModelOutput {
     var snapshot: AnyPublisher<HomeModel.Snapshot, Never> { get }
 }
 
+/// ViewModel of Home
+/// Contains the business logic to generate data for Home's UI.
+/// Independent of the actual ui operation required to update the view
 final class HomeViewModel: HomeViewModelOutput {
     private let input: HomeViewModelInput
     private var cancellables = Set<AnyCancellable>()

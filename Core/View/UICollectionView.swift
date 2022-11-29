@@ -7,6 +7,7 @@
 
 import UIKit
 
+/// syntax sugar for UICollectionView
 public extension UICollectionView {
     func dequeueReusableCell<T: UICollectionViewCell>(for indexPath: IndexPath) -> T {
         dequeueReusableCell(withReuseIdentifier: String(describing: T.self), for: indexPath) as! T

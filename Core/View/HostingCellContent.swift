@@ -13,6 +13,7 @@ public protocol HostingCellContent: View {
     init(_ dependency: Dependency)
 }
 
+/// A wrapper so that SwiftUI's View can be embedded in UIKit's UICollectionViewCell
 public final class HostingCell<Content: HostingCellContent>: UICollectionViewCell {
     private let hostingController = FixSafeAreaInsetsHostingController<Content?>(rootView: nil)
 

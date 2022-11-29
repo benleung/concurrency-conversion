@@ -5,10 +5,10 @@
 //  Created by Ben Leung on 2022/11/26.
 //
 
-import Foundation
 import OrderedCollections
 import Core
 
+/// fetching currency data (including exchange rate, name, symbol)
 protocol GetCurrenciesUseCase {
     func execute() async throws -> GetCurrenciesUseCaseIO.Output
 }

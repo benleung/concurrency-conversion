@@ -13,6 +13,7 @@ public protocol HostingReusableViewContent: View {
     init(_ dependency: Dependency)
 }
 
+/// A wrapper so that SwiftUI's View can be embedded in UIKit's UICollectionViewCell
 public final class HostingReusableView<Content: HostingReusableViewContent>: UICollectionReusableView {
     private let hostingController = UIHostingController<Content?>(rootView: nil)
 

@@ -6,8 +6,10 @@
 //
 
 import Foundation
+
 public enum APIError: Error {
-    case badResponse(Int?) // response code
+    /// response code
+    case badResponse(Int?)
     case custom(Error)
     case unexpected
 }

@@ -14,12 +14,16 @@ public enum HomeModel {
         case currencyList
     }
     enum Item: Hashable {
+        /// a currency block containing calcuated amount, current symbol and full name
         case currencyItem(CurrencyListItemView.Model)
     }
     
     enum DisplayMode {
+        /// diplay a list of currency based on exchange rate
         case currencyList
+        /// display a message to prompt user to input an amount
         case empty
+        /// display a message to prompt user that an error has occurred so that a list of currency cannot be displayed correctly
         case error
     }
 }

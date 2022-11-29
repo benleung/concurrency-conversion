@@ -10,6 +10,9 @@ import Combine
 import SwiftUI
 import Core
 
+/// ViewController of Home
+/// Responsible for the actual operation required to update the UI
+/// Independent of the business logic to generate data for Home's UI
 final class HomeViewController: UIViewController {
 
     private var input: HomeViewModelInput

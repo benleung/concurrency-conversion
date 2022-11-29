@@ -9,6 +9,7 @@ import Foundation
 
 import SwiftUI
 
+/// A view showing a list of currency symbol for selecting
 struct CurrencySelectView: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var searchText = ""
