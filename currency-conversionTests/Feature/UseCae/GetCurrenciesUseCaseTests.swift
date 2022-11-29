@@ -39,7 +39,7 @@ final class GetCurrenciesUseCaseTests: XCTestCase {
         let waitForUseCaseExecute = expectation(description: "Wait for use Case Execution")
         Task {
             // Act
-            let currencies = try! await useCase.execute().currencies
+            let currencies = await useCase.execute().currencies
             
             // Assert
             let expectedCurrencies: OrderedDictionary<String, Currency> = [
@@ -102,7 +102,7 @@ final class GetCurrenciesUseCaseTests: XCTestCase {
         let waitForUseCaseExecute = expectation(description: "Wait for use Case Execution")
         Task {
             // Act
-            let currencies = try! await useCase.execute().currencies
+            let currencies = await useCase.execute().currencies
             
             // Assert
             let expectedCurrencies: OrderedDictionary<String, Currency> = [
@@ -155,7 +155,7 @@ final class GetCurrenciesUseCaseTests: XCTestCase {
         let waitForUseCaseExecute = expectation(description: "Wait for use Case Execution")
         Task {
             // Act
-            let currencies = try! await useCase.execute().currencies
+            let currencies = await useCase.execute().currencies
             
             // Assert
             let expectedCurrencies: OrderedDictionary<String, Currency> = [
@@ -195,7 +195,7 @@ final class GetCurrenciesUseCaseTests: XCTestCase {
         wait(for: [waitForUseCaseExecute], timeout: 5.0)
     }
     
-    func test_execute_error() {
+    func test_execute_if_api_error_and_cache_empty() {
         // Arrange
         let mockCurrentDate = Date(timeIntervalSince1970: 10000)
         let mockTimeProvider = MockTimeProvider(currentDate: mockCurrentDate)
@@ -213,12 +213,61 @@ final class GetCurrenciesUseCaseTests: XCTestCase {
         let waitForUseCaseExecute = expectation(description: "Wait for use Case Execution")
         Task {
             // Act & Assert
-            do {
-                _ = try await useCase.execute().currencies
-                XCTAssert(false, "Should throw when there is api error")
-            } catch {
-                // success
+            let output = await useCase.execute().currencies
+            XCTAssertEqual(output, [:], "return an empty dict when there is api error")
+            waitForUseCaseExecute.fulfill()
+        }
+        wait(for: [waitForUseCaseExecute], timeout: 5.0)
+    }
+    
+    func test_execute_if_api_error_and_cache_exists() {
+        // Arrange
+        let lastCachedDate = Date(timeIntervalSince1970: 10000)
+        let mockCurrentDate = Date(timeIntervalSince1970: 10000 + 60*40) // 40 minutes later
+        let mockTimeProvider = MockTimeProvider(currentDate: mockCurrentDate)
+        let useCase = GetCurrenciesUseCaseImp(
+            timeProvider: mockTimeProvider,
+            getCurrencyListAPI: MockGetCurrencyListAPIError(),
+            getLatestExchangeRateAPI: MockGetLatestExchangeRateAPIError()
+        )
+        
+        AppUserDefaults.shared.currencyNames = [
+            "HKD": "Hong Kong Dollar"
+        ]
+        AppUserDefaults.shared.exchangeRates = [
+            "HKD": 7.81686
+        ]
+        AppUserDefaults.shared.currencyNamesLastUpdated = lastCachedDate
+        AppUserDefaults.shared.exchangeRatesLastUpdated = lastCachedDate
+
+        let waitForUseCaseExecute = expectation(description: "Wait for use Case Execution")
+        Task {
+            // Act
+            let currencies = await useCase.execute().currencies
+            
+            // Assert
+            let expectedCurrencies: OrderedDictionary<String, Currency> = [
+                "HKD": Currency(
+                    rate: 7.81686,
+                    symbol: "HKD",
+                    name: "Hong Kong Dollar"
+                )
+            ]
+            XCTAssertTrue(currencies.keys == expectedCurrencies.keys && currencies.values == expectedCurrencies.values,
+                                       "currencies is fetched from cache if api failed")
+            
+            for symbol in expectedCurrencies.keys {
+                XCTAssertEqual(AppUserDefaults.shared.exchangeRates[symbol] ?? 0, expectedCurrencies[symbol]?.rate ?? 0, accuracy: 0.000000001,
+                                           "cached exchangeRates is used")
+                XCTAssertEqual(AppUserDefaults.shared.currencyNames[symbol], expectedCurrencies[symbol]?.name,
+                                           "cached currencyNames is unchanged")
             }
+            
+            XCTAssertEqual(AppUserDefaults.shared.currencyNamesLastUpdated, lastCachedDate,
+                                       "cached currencyNamesLastUpdated is unchanged")
+            XCTAssertEqual(AppUserDefaults.shared.exchangeRatesLastUpdated, lastCachedDate,
+                                       "cached exchangeRatesLastUpdated is unchanged")
+            
             waitForUseCaseExecute.fulfill()
         }
         wait(for: [waitForUseCaseExecute], timeout: 5.0)

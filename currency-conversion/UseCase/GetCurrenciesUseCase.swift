@@ -42,13 +42,15 @@ struct GetCurrenciesUseCaseImp: GetCurrenciesUseCase {
         self.getLatestExchangeRateAPI = getLatestExchangeRateAPI
     }
     
-    func execute() async throws -> GetCurrenciesUseCaseIO.Output {
+    func execute() async -> GetCurrenciesUseCaseIO.Output {
         // note: fetch currencyNames and exchangeRates asynchronously in parallel for better performance
         async let asyncCurrencyNames: [String: String] = {
             let secondsSinceLastCached = timeProvider.now().timeIntervalSinceReferenceDate - (AppUserDefaults.shared.currencyNamesLastUpdated ?? Date.distantPast).timeIntervalSinceReferenceDate
-            if secondsSinceLastCached >= cacheExpireSeconds {
-                // cache expires and need refresh
-                AppUserDefaults.shared.currencyNames = try await getCurrencyListAPI.execute()
+            if secondsSinceLastCached >= cacheExpireSeconds,
+               // cache expires and need refresh
+                let getCurrencyListAPIOutput = try? await getCurrencyListAPI.execute() {
+                // note: if api fetching failed, AppUserDefaults.shared.currencyNames would be used, otherwise update the cache
+                AppUserDefaults.shared.currencyNames = getCurrencyListAPIOutput
                 AppUserDefaults.shared.currencyNamesLastUpdated = timeProvider.now()
             }
             return AppUserDefaults.shared.currencyNames
@@ -56,15 +58,17 @@ struct GetCurrenciesUseCaseImp: GetCurrenciesUseCase {
 
         async let asyncExchangeRates: [String : Double] = {
             let secondsSinceLastCached = timeProvider.now().timeIntervalSinceReferenceDate - (AppUserDefaults.shared.exchangeRatesLastUpdated ?? Date.distantPast).timeIntervalSinceReferenceDate
-            if secondsSinceLastCached >= cacheExpireSeconds {
-                // cache expires and need refresh
-                AppUserDefaults.shared.exchangeRates = try await getLatestExchangeRateAPI.execute().rates
+            if secondsSinceLastCached >= cacheExpireSeconds,
+               // cache expires and need refresh
+                let getLatestExchangeRateAPIOutput = try? await getLatestExchangeRateAPI.execute() {
+                // note: if api fetching failed, AppUserDefaults.shared.exchangeRates would be used, otherwise update the cache
+                AppUserDefaults.shared.exchangeRates = getLatestExchangeRateAPIOutput.rates
                 AppUserDefaults.shared.exchangeRatesLastUpdated = timeProvider.now()
             }
             return AppUserDefaults.shared.exchangeRates
         }()
         
-        let (currencyNames, exchangeRates) = try await (asyncCurrencyNames, asyncExchangeRates)
+        let (currencyNames, exchangeRates) = await (asyncCurrencyNames, asyncExchangeRates)
         
         var currencies = OrderedDictionary<String, GetCurrenciesUseCaseIO.Output.Currency>()
         for symbol in exchangeRates.keys.sorted() {

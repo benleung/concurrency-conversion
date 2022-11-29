@@ -118,13 +118,8 @@ final class HomeViewModel: HomeViewModelOutput {
             input.didUpdateAmount.map { _ in () }
         ).sink {
             Task {
-                do {
-                    let getCurrenciesUseCaseOutput = try await getCurrenciesUseCase.execute()
-                    self.currencies.send(getCurrenciesUseCaseOutput.currencies)
-                } catch {
-                    // do nothing when error occurred during updating of currencies data, as existing data can still be displayed to users, which users do not need to be aware of
-                    // note: in actually development, I would log the error
-                }
+                let getCurrenciesUseCaseOutput = try await getCurrenciesUseCase.execute()
+                self.currencies.send(getCurrenciesUseCaseOutput.currencies)
             }
         }
         .store(in: &cancellables)

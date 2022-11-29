@@ -274,7 +274,7 @@ private struct GetCurrenciesUseCaseSuccessMock: GetCurrenciesUseCase {
     typealias Currency = GetCurrenciesUseCaseIO.Output.Currency
     
     func execute() async throws -> GetCurrenciesUseCaseIO.Output {
-        var currencies: OrderedDictionary<String, Currency> = [
+        let currencies: OrderedDictionary<String, Currency> = [
             "HKD": Currency(
                 rate: 7.81686,
                 symbol: "HKD",
