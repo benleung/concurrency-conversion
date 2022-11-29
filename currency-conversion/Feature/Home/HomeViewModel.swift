@@ -21,7 +21,7 @@ struct HomeViewModelInput {
 /// Data for UI's updates
 /// Output from ViewModel to ViewController
 protocol HomeViewModelOutput {
-    var openCurrencySelectModal: AnyPublisher<(list: [CurrencySelectView.Model], selected: String), Never> { get }
+    var openCurrencySelectModal: AnyPublisher<(list: [CurrencySelectView.Item], selected: String), Never> { get }
     var selectedCurrencyUnit: AnyPublisher<String, Never> { get }
     var displayMode: AnyPublisher<HomeModel.DisplayMode, Never> { get }
     var snapshot: AnyPublisher<HomeModel.Snapshot, Never> { get }
@@ -37,14 +37,14 @@ final class HomeViewModel: HomeViewModelOutput {
     // MARK: Output
     lazy var openCurrencySelectModal = {
         input.didTapCurrencyDropDownView
-            .map { Void -> (list: [CurrencySelectView.Model], selected: String) in
-                var items: [CurrencySelectView.Model] = []
+            .map { Void -> (list: [CurrencySelectView.Item], selected: String) in
+                var items: [CurrencySelectView.Item] = []
                 
                 let currencyNames = AppUserDefaults.shared.currencyNames
                 
                 for symbol in self.currencies.value.keys {
                     if let currency = self.currencies.value[symbol] {
-                        items.append(CurrencySelectView.Model(
+                        items.append(CurrencySelectView.Item(
                             currencyAlias: currency.symbol,
                             currencyNameWithAlias: currency.fullname
                         ))

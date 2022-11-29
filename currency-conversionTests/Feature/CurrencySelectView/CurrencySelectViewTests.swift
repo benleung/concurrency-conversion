@@ -21,9 +21,9 @@ final class CurrencySelectViewTests: XCTestCase {
     func test_filterWithSearchText() throws {
         // Arrange
         let models = [
-            CurrencySelectView.Model(currencyAlias: "USD", currencyNameWithAlias: "USD (United States Dollar)"),
-            CurrencySelectView.Model(currencyAlias: "HKD", currencyNameWithAlias: "HKD (Hong Kong Dollar)"),
-            CurrencySelectView.Model(currencyAlias: "JPY", currencyNameWithAlias: "JPY (Japanese Yen)")
+            CurrencySelectView.Item(currencyAlias: "USD", currencyNameWithAlias: "USD (United States Dollar)"),
+            CurrencySelectView.Item(currencyAlias: "HKD", currencyNameWithAlias: "HKD (Hong Kong Dollar)"),
+            CurrencySelectView.Item(currencyAlias: "JPY", currencyNameWithAlias: "JPY (Japanese Yen)")
         ]
         
         XCTContext.runActivity(named: "filter with Dollar") { _ in
@@ -37,8 +37,8 @@ final class CurrencySelectViewTests: XCTestCase {
             
             // Assert
             let expected = [
-                CurrencySelectView.Model(currencyAlias: "USD", currencyNameWithAlias: "USD (United States Dollar)"),
-                CurrencySelectView.Model(currencyAlias: "HKD", currencyNameWithAlias: "HKD (Hong Kong Dollar)")
+                CurrencySelectView.Item(currencyAlias: "USD", currencyNameWithAlias: "USD (United States Dollar)"),
+                CurrencySelectView.Item(currencyAlias: "HKD", currencyNameWithAlias: "HKD (Hong Kong Dollar)")
             ]
             XCTAssertEqual(actual, expected, "JPY is filtered out because it doesn't contain Dollar")
         }
@@ -54,9 +54,9 @@ final class CurrencySelectViewTests: XCTestCase {
             
             // Assert
             let expected = [
-                CurrencySelectView.Model(currencyAlias: "USD", currencyNameWithAlias: "USD (United States Dollar)"),
-                CurrencySelectView.Model(currencyAlias: "HKD", currencyNameWithAlias: "HKD (Hong Kong Dollar)"),
-                CurrencySelectView.Model(currencyAlias: "JPY", currencyNameWithAlias: "JPY (Japanese Yen)")
+                CurrencySelectView.Item(currencyAlias: "USD", currencyNameWithAlias: "USD (United States Dollar)"),
+                CurrencySelectView.Item(currencyAlias: "HKD", currencyNameWithAlias: "HKD (Hong Kong Dollar)"),
+                CurrencySelectView.Item(currencyAlias: "JPY", currencyNameWithAlias: "JPY (Japanese Yen)")
             ]
             XCTAssertEqual(actual, expected, "no currencies are filltered when searchText is empty")
         }

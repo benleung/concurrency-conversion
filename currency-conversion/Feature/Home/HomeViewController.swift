@@ -181,7 +181,9 @@ final class HomeViewController: UIViewController {
             .sink { [weak self] in
                 guard let self = self else { return }
 
-                let currencySelectView = CurrencySelectView($0.list, input: self.input, selectedCurrencyUnit: $0.selected)
+                let currencySelectView = CurrencySelectView(items: $0.list, selectedCurrencyUnit: $0.selected) {
+                    self.input.didSelectedCurrency.send($0)
+                }
                 let vc = UIHostingController(rootView: currencySelectView)
                 self.present(vc, animated: true)
             }.store(in: &cancellables)

@@ -76,7 +76,7 @@ final class HomeViewModelTests: XCTestCase {
         // Arrange
         let input = HomeViewModelInput()
         let output: HomeViewModelOutput = HomeViewModel(input: input, getCurrenciesUseCase: GetCurrenciesUseCaseSuccessMock())
-        let openCurrencySelectModal = TestableSubscriber<(list: [CurrencySelectView.Model], selected: String), Never>()
+        let openCurrencySelectModal = TestableSubscriber<(list: [CurrencySelectView.Item], selected: String), Never>()
         output.openCurrencySelectModal.receive(subscriber: openCurrencySelectModal)
         
         // Act
@@ -96,7 +96,7 @@ final class HomeViewModelTests: XCTestCase {
             }
             
             XCTContext.runActivity(named: "currencySelectButton is tapped") { _ in
-                typealias Item = CurrencySelectView.Model
+                typealias Item = CurrencySelectView.Item
                 // Act
                 input.didTapCurrencyDropDownView.send()
 
@@ -123,7 +123,7 @@ final class HomeViewModelTests: XCTestCase {
         // Arrange
         let input = HomeViewModelInput()
         let output: HomeViewModelOutput = HomeViewModel(input: input, getCurrenciesUseCase: GetCurrenciesUseCaseSuccessMock())
-        let openCurrencySelectModal = TestableSubscriber<(list: [CurrencySelectView.Model], selected: String), Never>()
+        let openCurrencySelectModal = TestableSubscriber<(list: [CurrencySelectView.Item], selected: String), Never>()
         output.openCurrencySelectModal.receive(subscriber: openCurrencySelectModal)
         
         // Act
@@ -134,7 +134,7 @@ final class HomeViewModelTests: XCTestCase {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             
             XCTContext.runActivity(named: "currencySelectButton is tapped") { _ in
-                typealias Item = CurrencySelectView.Model
+                typealias Item = CurrencySelectView.Item
                 // Act
                 input.didTapCurrencyDropDownView.send()
 
@@ -242,7 +242,7 @@ final class HomeViewModelTests: XCTestCase {
         // Arrange
         let input = HomeViewModelInput()
         let output: HomeViewModelOutput = HomeViewModel(input: input, getCurrenciesUseCase: GetCurrenciesUseCaseErrorMock())
-        let openCurrencySelectModal = TestableSubscriber<(list: [CurrencySelectView.Model], selected: String), Never>()
+        let openCurrencySelectModal = TestableSubscriber<(list: [CurrencySelectView.Item], selected: String), Never>()
         output.openCurrencySelectModal.receive(subscriber: openCurrencySelectModal)
         
         // Act
@@ -253,7 +253,7 @@ final class HomeViewModelTests: XCTestCase {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             
             XCTContext.runActivity(named: "currencySelectButton is tapped") { _ in
-                typealias Item = CurrencySelectView.Model
+                typealias Item = CurrencySelectView.Item
                 // Act
                 input.didTapCurrencyDropDownView.send()
 

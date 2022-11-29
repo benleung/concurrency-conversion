@@ -16,9 +16,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B5AB1114292E77F100C4DBCD"
-               BuildableName = "currency-conversionTests.xctest"
-               BlueprintName = "currency-conversionTests"
+               BlueprintIdentifier = "B5AB11B02935015E00C4DBCD"
+               BuildableName = "CoreTests.xctest"
+               BlueprintName = "CoreTests"
                ReferencedContainer = "container:currency-conversion.xcodeproj">
             </BuildableReference>
          </TestableReference>

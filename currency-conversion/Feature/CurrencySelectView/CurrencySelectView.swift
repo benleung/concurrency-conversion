@@ -5,27 +5,25 @@
 //  Created by Ben Leung on 2022/11/26.
 //
 
-import Foundation
-
 import SwiftUI
 
 /// A view showing a list of currency symbol for selecting
 struct CurrencySelectView: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var searchText = ""
-    var selectedCurrencyUnit: String
+    private let selectedCurrencyUnit: String
+    private let onSelectRow: (String) -> Void
+    private let items: [Item]
 
-    public struct Model: Hashable {
+    public struct Item: Hashable {
         let currencyAlias: String
         let currencyNameWithAlias: String
     }
-    let models: [Model]
-    let input: HomeViewModelInput
 
-    public init(_ models: [Model], input: HomeViewModelInput, selectedCurrencyUnit: String) {
-        self.models = models
-        self.input = input
+    public init(items: [Item], selectedCurrencyUnit: String, onSelectRow: @escaping (String) -> Void) {
+        self.items = items
         self.selectedCurrencyUnit = selectedCurrencyUnit
+        self.onSelectRow = onSelectRow
     }
 
     public var body: some View {
@@ -39,10 +37,10 @@ struct CurrencySelectView: View {
             }
             .padding(EdgeInsets(top: 10, leading: 20, bottom: 0, trailing: 20))
             List {
-                ForEach(models.filter { CurrencySelectView.filterWithSearchText(searchText: searchText, itemText: $0.currencyNameWithAlias) } , id: \.self) { model in
+                ForEach(items.filter { CurrencySelectView.filterWithSearchText(searchText: searchText, itemText: $0.currencyNameWithAlias) } , id: \.self) { model in
                     Button {
+                        onSelectRow(model.currencyAlias)
                         presentationMode.wrappedValue.dismiss()
-                        input.didSelectedCurrency.send(model.currencyAlias)
                     } label: {
                         HStack {
                             Text(model.currencyNameWithAlias)
