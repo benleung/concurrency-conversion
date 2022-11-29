@@ -29,13 +29,13 @@ struct GetCurrenciesUseCaseIO : Codable {
 struct GetCurrenciesUseCaseImp: GetCurrenciesUseCase {
     private let cacheExpireSeconds: TimeInterval = 60*30 // 30 mintues
     private let timeProvider: TimeProviderProtocol
-    private let getCurrencyListAPI: GetCurrencyListAPI
-    private let getLatestExchangeRateAPI: GetLatestExchangeRateAPI
+    private let getCurrencyListAPI: GetCurrencyListAPIProtocol
+    private let getLatestExchangeRateAPI: GetLatestExchangeRateAPIProtocol
     
     init(
         timeProvider: TimeProviderProtocol = TimeProvider(),
-        getCurrencyListAPI: GetCurrencyListAPI = GetCurrencyListAPI(),
-        getLatestExchangeRateAPI: GetLatestExchangeRateAPI = GetLatestExchangeRateAPI()
+        getCurrencyListAPI: GetCurrencyListAPIProtocol = GetCurrencyListAPI(),
+        getLatestExchangeRateAPI: GetLatestExchangeRateAPIProtocol = GetLatestExchangeRateAPI()
     ) {
         self.timeProvider = timeProvider
         self.getCurrencyListAPI = getCurrencyListAPI

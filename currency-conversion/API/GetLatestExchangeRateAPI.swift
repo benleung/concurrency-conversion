@@ -7,7 +7,11 @@
 
 import Core
 
-class GetLatestExchangeRateAPI: OpenExchangeRatesApiProtocol {
+protocol GetLatestExchangeRateAPIProtocol {
+    func execute() async throws -> GetLatestExchangeRateResponse
+}
+
+struct GetLatestExchangeRateAPI: GetLatestExchangeRateAPIProtocol, OpenExchangeRatesApiProtocol {
     var path: String = "latest.json"
     
     func execute() async throws -> GetLatestExchangeRateResponse {

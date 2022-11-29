@@ -269,7 +269,7 @@
 		B5AB11532932190D00C4DBCD /* Feature */ = {
 			isa = PBXGroup;
 			children = (
-				B5AB11722933B70500C4DBCD /* UseCae */,
+				B5AB11722933B70500C4DBCD /* UseCase */,
 				B5AB116C2933AF9400C4DBCD /* CurrencySelectView */,
 				B5AB11542932191C00C4DBCD /* Home */,
 			);
@@ -308,12 +308,12 @@
 			path = Utilities;
 			sourceTree = "<group>";
 		};
-		B5AB11722933B70500C4DBCD /* UseCae */ = {
+		B5AB11722933B70500C4DBCD /* UseCase */ = {
 			isa = PBXGroup;
 			children = (
 				B5AB11732933B72A00C4DBCD /* GetCurrenciesUseCaseTests.swift */,
 			);
-			path = UseCae;
+			path = UseCase;
 			sourceTree = "<group>";
 		};
 		B5AB118E2934CC0A00C4DBCD /* Core */ = {

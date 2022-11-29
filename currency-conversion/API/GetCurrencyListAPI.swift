@@ -7,7 +7,11 @@
 
 import Core
 
-class GetCurrencyListAPI : OpenExchangeRatesApiProtocol {
+protocol GetCurrencyListAPIProtocol {
+    func execute() async throws -> [String: String]
+}
+
+struct GetCurrencyListAPI: GetCurrencyListAPIProtocol, OpenExchangeRatesApiProtocol {
     var path: String = "currencies.json"
     
     func execute() async throws -> [String: String] {

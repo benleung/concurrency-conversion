@@ -46,3 +46,15 @@ struct CurrencyListItemView: HostingCellContent {
         )
     }
 }
+
+struct CurrencyListItemView_Previews: PreviewProvider {
+    static var previews: some View {
+        CurrencyListItemView(
+            CurrencyListItemView.Model(
+                currencyAlias: "USD",
+                currencyName: "United States Dollar",
+                amount: "1,000"
+            )
+        )
+    }
+}

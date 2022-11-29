@@ -119,7 +119,7 @@ final class HomeViewModel: HomeViewModelOutput {
             }
             .store(in: &cancellables)
 
-        // side effects
+        // currencies
         Publishers.Merge(
             input.viewWillAppear,
             input.didUpdateAmount.map { _ in () }

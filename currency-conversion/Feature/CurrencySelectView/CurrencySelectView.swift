@@ -63,3 +63,17 @@ struct CurrencySelectView: View {
         searchText.isEmpty || itemText.contains(searchText)
     }
 }
+
+struct CurrencySelectView_Previews: PreviewProvider {
+    static var previews: some View {
+        CurrencySelectView(
+            items: [
+                CurrencySelectView.Item(currencyAlias: "USD", currencyNameWithAlias: "USD (United States Dollar)"),
+                CurrencySelectView.Item(currencyAlias: "HKD", currencyNameWithAlias: "HKD (Hong Kong Dollar)"),
+                CurrencySelectView.Item(currencyAlias: "JPY", currencyNameWithAlias: "JPY (Japanese Yen)")
+            ],
+            selectedCurrencyUnit: "USD",
+            onSelectRow: { _ in }
+        )
+    }
+}

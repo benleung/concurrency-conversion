@@ -290,9 +290,8 @@ private class MockTimeProvider: TimeProviderProtocol {
     }
 }
 
-private class MockGetCurrencyListAPI: GetCurrencyListAPI {
-    
-    override func execute() async throws -> [String: String] {
+private struct MockGetCurrencyListAPI: GetCurrencyListAPIProtocol {
+    func execute() async throws -> [String: String] {
         return [
             "HKD": "Hong Kong Dollar",
             "JPY": "Japanese Yen",
@@ -301,8 +300,8 @@ private class MockGetCurrencyListAPI: GetCurrencyListAPI {
     }
 }
 
-private class MockGetLatestExchangeRateAPI: GetLatestExchangeRateAPI {
-    override func execute() async throws -> GetLatestExchangeRateResponse {
+private struct MockGetLatestExchangeRateAPI: GetLatestExchangeRateAPIProtocol {
+    func execute() async throws -> GetLatestExchangeRateResponse {
 
         let result = GetLatestExchangeRateResponse(timestamp: 0, base: "USD", rates: [
             "HKD": 7.81686,
@@ -314,15 +313,14 @@ private class MockGetLatestExchangeRateAPI: GetLatestExchangeRateAPI {
     }
 }
 
-private class MockGetCurrencyListAPIError: GetCurrencyListAPI {
-    
-    override func execute() async throws -> [String: String] {
+private struct MockGetCurrencyListAPIError: GetCurrencyListAPIProtocol {
+    func execute() async throws -> [String: String] {
         throw APIError.unexpected
     }
 }
 
-private class MockGetLatestExchangeRateAPIError: GetLatestExchangeRateAPI {
-    override func execute() async throws -> GetLatestExchangeRateResponse {
+private struct MockGetLatestExchangeRateAPIError: GetLatestExchangeRateAPIProtocol {
+    func execute() async throws -> GetLatestExchangeRateResponse {
         throw APIError.unexpected
     }
 }

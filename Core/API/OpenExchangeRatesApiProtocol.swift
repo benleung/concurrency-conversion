@@ -15,7 +15,7 @@ public protocol OpenExchangeRatesApiProtocol {
 extension OpenExchangeRatesApiProtocol {
     private var baseUrl: String { "https://openexchangerates.org/api/" }
     private var queryParamKeyAppId: String { "app_id" }
-    private var appId: String { "5d33f5e06cf24b2888783753f6868afb" }
+    private var appId: String { "5d33f5e06cf24b2888783753f6868afb" }    // TODO: better keep this value to a seperate secret file
     
     private var url: URL {
         guard let url = URL(string: "\(baseUrl)\(path)?\(queryParamKeyAppId)=\(appId)") else {
